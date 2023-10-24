@@ -19,6 +19,8 @@ class Wrapper:
         for team in self.teams:
             if team.get_name() == team_name:
                 return team
+        if len(team_name) < 3:
+            print()
         new_team = Team()
         new_team.set_name(team_name)
         self.teams.append(new_team)
@@ -112,35 +114,41 @@ class Team:
         else:
             self.losses += 1
 
+#List of Non-D1 schools sneaking in
+imposters_list = ["Mary Baldwin", "Embry-Riddle (FL)", "", "Assumption", "Webster", "Adrian", "Averett", "Oberlin", "St. Joseph&#39;s (L.I.)", "Suffolk",
+                  "Fresno Pacific", "Trinity (TX)", "Aurora"]
+
 my_wrapper = Wrapper()
 
-month_tracker = 8
-day_tracker = 24
+#Start of game scraping - 8/24 is first day of season
 
-#Update this with current month/day for up to date rankings
-current_month = 10
-current_day = 24
+start_month = 8
+start_day = 24
 
-while month_tracker < current_month or day_tracker < current_day:
+#End of game scraping - Update this with current month/day for up to date rankings
+end_month = 10
+end_day = 24
 
-    if month_tracker == 8 and day_tracker == 32:
-        month_tracker = 9
-        day_tracker = 1
-    if month_tracker == 9 and day_tracker == 31:
-        month_tracker = 10
-        day_tracker = 1
+while start_month < end_month or start_day < end_day:
+
+    if start_month == 8 and start_day == 32:
+        start_month = 9
+        start_day = 1
+    if start_month == 9 and start_day == 31:
+        start_month = 10
+        start_day = 1
 
     month_string = ""
     day_string = ""
 
-    if month_tracker < 10:
-        month_string = "0" + str(month_tracker)
+    if start_month < 10:
+        month_string = "0" + str(start_month)
     else:
-        month_string = str(month_tracker)
-    if day_tracker < 10:
-        day_string = "0" + str(day_tracker)
+        month_string = str(start_month)
+    if start_day < 10:
+        day_string = "0" + str(start_day)
     else:
-        day_string = str(day_tracker)
+        day_string = str(start_day)
 
     date_string = month_string + "%2F" + day_string + "%2F2023"
 
@@ -193,9 +201,17 @@ while month_tracker < current_month or day_tracker < current_day:
                 real_game = True
                 if away_team_string.__contains__("(0-0)"):
                     real_game = False
+                if away_team_name in imposters_list:
+                    real_game = False
+                if away_team_name == "":
+                    print()
             else:
                 home_team_string = page_text[start_index:end_index]
                 home_team_name = page_text[start_index:name_end_index]
+                if home_team_name == "":
+                    print()
+                if home_team_name in imposters_list:
+                    real_game = False
                 if home_team_string.__contains__("(0-0)"):
                     real_game = False
                 #print("Away: " + away_team_name + " vs. Home: " + home_team_name)
@@ -215,19 +231,28 @@ while month_tracker < current_month or day_tracker < current_day:
                 away_score = score_int
             else:
                 home_score = score_int
+                if len(away_team_name) < 2 or len(home_team_name) < 2:
+                    real_game = False
                 print(away_team_name + ": " + str(away_score) + " - " + home_team_name + ": " + str(home_score))
-                my_wrapper.input_match(away_team_name, home_team_name, away_score, home_score, neutral_game)
+                if real_game:
+                    my_wrapper.input_match(away_team_name, home_team_name, away_score, home_score, neutral_game)
+                    away_team_name = ""
+                    home_team_name = ""
+                    away_score = 0
+                    home_score = 0
+                else:
+                    print("NOT REAL GAME")
+                    print()
                 if neutral_game:
                     print("NEUTRAL GAME")
-                if not real_game:
-                    print("NOT REAL GAME")
+                    print()
             #print(str(teams_count) + " " + score_string.strip())
         if page_text[i:i+32] == "<td rowspan=\"2\" valign=\"center\">":
             if page_text[i+32:i+50].__contains__("@"):
                 neutral_game = True
             if page_text[i+32:i+80].__contains__("Canceled"):
                 real_game = False
-    day_tracker += 1
+    start_day += 1
 my_wrapper.print_rankings()
         #if teams_count % 2 == 0:
             #print(away_team_string + ": " + str(away_score) + " - " + home_team_string + ": " + str(home_score))
