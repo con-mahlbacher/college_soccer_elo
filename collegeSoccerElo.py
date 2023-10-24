@@ -227,6 +227,8 @@ while start_month < end_month or start_day < end_day:
             #print("Start " + str(start_index) + "   End " + str(end_index))
             score_string = page_text[start_index:end_index]
             score_int = int(score_string.strip())
+            if len(home_team_name) < 2 and len(away_team_name) < 2:
+                teams_count += 1
             if teams_count % 2 == 1:
                 away_score = score_int
             else:
@@ -236,16 +238,16 @@ while start_month < end_month or start_day < end_day:
                 print(away_team_name + ": " + str(away_score) + " - " + home_team_name + ": " + str(home_score))
                 if real_game:
                     my_wrapper.input_match(away_team_name, home_team_name, away_score, home_score, neutral_game)
-                    away_team_name = ""
-                    home_team_name = ""
-                    away_score = 0
-                    home_score = 0
                 else:
                     print("NOT REAL GAME")
                     print()
                 if neutral_game:
                     print("NEUTRAL GAME")
                     print()
+                away_team_name = ""
+                home_team_name = ""
+                away_score = 0
+                home_score = 0
             #print(str(teams_count) + " " + score_string.strip())
         if page_text[i:i+32] == "<td rowspan=\"2\" valign=\"center\">":
             if page_text[i+32:i+50].__contains__("@"):
