@@ -114,29 +114,33 @@ class Team:
 
 my_wrapper = Wrapper()
 
-month = 8
-day = 24
+month_tracker = 8
+day_tracker = 24
 
-while month < 10 or day < 22:
+#Update this with current month/day for up to date rankings
+current_month = 10
+current_day = 24
 
-    if month == 8 and day == 32:
-        month = 9
-        day = 1
-    if month == 9 and day == 31:
-        month = 10
-        day = 1
+while month_tracker < current_month or day_tracker < current_day:
+
+    if month_tracker == 8 and day_tracker == 32:
+        month_tracker = 9
+        day_tracker = 1
+    if month_tracker == 9 and day_tracker == 31:
+        month_tracker = 10
+        day_tracker = 1
 
     month_string = ""
     day_string = ""
 
-    if month < 10:
-        month_string = "0" + str(month)
+    if month_tracker < 10:
+        month_string = "0" + str(month_tracker)
     else:
-        month_string = str(month)
-    if day < 10:
-        day_string = "0" + str(day)
+        month_string = str(month_tracker)
+    if day_tracker < 10:
+        day_string = "0" + str(day_tracker)
     else:
-        day_string = str(day)
+        day_string = str(day_tracker)
 
     date_string = month_string + "%2F" + day_string + "%2F2023"
 
@@ -223,7 +227,7 @@ while month < 10 or day < 22:
                 neutral_game = True
             if page_text[i+32:i+80].__contains__("Canceled"):
                 real_game = False
-    day += 1
+    day_tracker += 1
 my_wrapper.print_rankings()
         #if teams_count % 2 == 0:
             #print(away_team_string + ": " + str(away_score) + " - " + home_team_string + ": " + str(home_score))
