@@ -116,7 +116,7 @@ class Team:
 
 #List of Non-D1 schools sneaking in
 imposters_list = ["Mary Baldwin", "Embry-Riddle (FL)", "", "Assumption", "Webster", "Adrian", "Averett", "Oberlin", "St. Joseph&#39;s (L.I.)", "Suffolk",
-                  "Fresno Pacific", "Trinity (TX)", "Aurora"]
+                  "Fresno Pacific", "Trinity (TX)", "Aurora", "Blackburn"]
 
 my_wrapper = Wrapper()
 
@@ -127,7 +127,7 @@ start_day = 24
 
 #End of game scraping - Update this with current month/day for up to date rankings
 end_month = 10
-end_day = 24
+end_day = 25
 
 while start_month < end_month or start_day < end_day:
 
